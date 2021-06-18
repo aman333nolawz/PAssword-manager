@@ -122,121 +122,121 @@ if ENABLE_AUTOCOMPLETE:
     readline.set_completer(AutoCompleter(modes_list).complete)
     readline.parse_and_bind("tab: complete")
 
-# try:
+try:
 
-while True:
-    mode = ask("What do you want to do?: ")
-    if mode is None:
-        continue
+    while True:
+        mode = ask("What do you want to do?: ")
+        if mode is None:
+            continue
 
-    mode = mode.rstrip()
+        mode = mode.rstrip()
 
-    if mode in modes["exit"]:
-        break
+        if mode in modes["exit"]:
+            break
 
-    if mode in modes["add_user"]:
-        username = ask("What's the username: ").lower()
-        password = getpass("What's the password: ")
-        if username is not None and password is not None:
-            add_user(username, password)
+        if mode in modes["add_user"]:
+            username = ask("What's the username: ").lower()
+            password = getpass("What's the password: ")
+            if username is not None and password is not None:
+                add_user(username, password)
 
-    elif mode in modes["delete_user"]:
-        username = ask("Type the username you want to remove: ")
-        if username is not None:
-            delete_user(username)
+        elif mode in modes["delete_user"]:
+            username = ask("Type the username you want to remove: ")
+            if username is not None:
+                delete_user(username)
 
-    elif mode in modes["update_user"]:
-        username = ask("Type the username you want to update: ")
-        if username is not None:
-            update_user(username)
+        elif mode in modes["update_user"]:
+            username = ask("Type the username you want to update: ")
+            if username is not None:
+                update_user(username)
 
-    elif mode in modes["get_user"]:
-        username = ask("Type the username: ")
-        if username is not None:
-            get_user(username)
+        elif mode in modes["get_user"]:
+            username = ask("Type the username: ")
+            if username is not None:
+                get_user(username)
 
-    elif mode in modes["get_all_users"]:
-        users = get_all_users()
+        elif mode in modes["get_all_users"]:
+            users = get_all_users()
 
-    elif mode in modes["delete_all_users"]:
-        delete_all_users()
+        elif mode in modes["delete_all_users"]:
+            delete_all_users()
 
-    elif mode in modes["make_password"]:  # Make or generate password
-        username = ask("What's the username: ")
-        if PASSWORD_GENERATION_TYPE.lower() == "ask":
-            if ENABLE_INQUIRER_FOR_PASSWORD_GENERATION_TYPE:
-                import inquirer
+        elif mode in modes["make_password"]:  # Make or generate password
+            username = ask("What's the username: ")
+            if PASSWORD_GENERATION_TYPE.lower() == "ask":
+                if ENABLE_INQUIRER_FOR_PASSWORD_GENERATION_TYPE:
+                    import inquirer
 
-                options = [
-                    inquirer.List(
-                        "PASSWORD_GENERATION_TYPE",
-                        message="Which method to generate password?: ",
-                        choices=["diceware", "random"],
-                    ),
-                ]
-                answer = inquirer.prompt(options)
-                password_method = answer["PASSWORD_GENERATION_TYPE"]
-            else:
-                password_method = ask(
-                    "Type the method to generate passsword:\n(d)iceware, (r)andom. Default is diceware: "
-                )
-                if password_method in ["r", "random"]:
-                    password_method = "random"
+                    options = [
+                        inquirer.List(
+                            "PASSWORD_GENERATION_TYPE",
+                            message="Which method to generate password?: ",
+                            choices=["diceware", "random"],
+                        ),
+                    ]
+                    answer = inquirer.prompt(options)
+                    password_method = answer["PASSWORD_GENERATION_TYPE"]
                 else:
-                    password_method = "diceware"
-        else:
-            password_method = PASSWORD_GENERATION_TYPE
-        length = eval(ask("Type the length of the password: "))
-        add_user(username, make_password(length, password_method.lower()))
+                    password_method = ask(
+                        "Type the method to generate passsword:\n(d)iceware, (r)andom. Default is diceware: "
+                    )
+                    if password_method in ["r", "random"]:
+                        password_method = "random"
+                    else:
+                        password_method = "diceware"
+            else:
+                password_method = PASSWORD_GENERATION_TYPE
+            length = eval(ask("Type the length of the password: "))
+            add_user(username, make_password(length, password_method.lower()))
 
-    elif mode in modes["change_master_password"]:
-        change_master_password()
+        elif mode in modes["change_master_password"]:
+            change_master_password()
 
-    elif mode in modes["store"]:
-        if ENABLE_AUTOCOMPLETE:
-            readline.set_completer(None)
+        elif mode in modes["store"]:
+            if ENABLE_AUTOCOMPLETE:
+                readline.set_completer(None)
 
-        filename = ask("Type the filename: ")
-        if filename is not None:
-            store(filename)
+            filename = ask("Type the filename: ")
+            if filename is not None:
+                store(filename)
 
-        if ENABLE_AUTOCOMPLETE:
-            readline.set_completer(AutoCompleter(modes_list).complete)
+            if ENABLE_AUTOCOMPLETE:
+                readline.set_completer(AutoCompleter(modes_list).complete)
 
-    elif mode in modes["preview"]:
-        if ENABLE_AUTOCOMPLETE:
-            readline.set_completer(
-                StorageCompleter(get_all_files_stored()).complete
-            )
+        elif mode in modes["preview"]:
+            if ENABLE_AUTOCOMPLETE:
+                readline.set_completer(
+                    StorageCompleter(get_all_files_stored()).complete
+                )
 
-        filename = ask("Type the filename: ")
-        if filename is not None:
-            preview(filename)
+            filename = ask("Type the filename: ")
+            if filename is not None:
+                preview(filename)
 
-        if ENABLE_AUTOCOMPLETE:
-            readline.set_completer(AutoCompleter(modes_list).complete)
+            if ENABLE_AUTOCOMPLETE:
+                readline.set_completer(AutoCompleter(modes_list).complete)
 
-    elif mode in modes["restore"]:
-        if ENABLE_AUTOCOMPLETE:
-            readline.set_completer(
-                StorageCompleter(get_all_files_stored()).complete
-            )
+        elif mode in modes["restore"]:
+            if ENABLE_AUTOCOMPLETE:
+                readline.set_completer(
+                    StorageCompleter(get_all_files_stored()).complete
+                )
 
-        filename = ask("Type the filename to restore: ")
-        if filename is not None:
-            restore(filename)
+            filename = ask("Type the filename to restore: ")
+            if filename is not None:
+                restore(filename)
 
-        if ENABLE_AUTOCOMPLETE:
-            readline.set_completer(AutoCompleter(modes_list).complete)
+            if ENABLE_AUTOCOMPLETE:
+                readline.set_completer(AutoCompleter(modes_list).complete)
 
-    elif mode in modes["info"]:
-        info()
+        elif mode in modes["info"]:
+            info()
 
-shutil.rmtree(temp_dir)
-PASSWORD_CONN.close()
-STORAGE_CONN.close()
-# except Exception as e:
-#     print(e)
-#     shutil.rmtree(temp_dir)
-#     PASSWORD_CONN.close()
-#     STORAGE_CONN.close()
+    shutil.rmtree(temp_dir)
+    PASSWORD_CONN.close()
+    STORAGE_CONN.close()
+except Exception as e:
+    print(e)
+    shutil.rmtree(temp_dir)
+    PASSWORD_CONN.close()
+    STORAGE_CONN.close()
