@@ -5,7 +5,7 @@ SALT = b"SomeTextGoesHere"
 PASSWORDS_FILE = "passwords.db"
 
 # PAth to where the storage file should be.
-STORAGE_FILE = "a.db"
+STORAGE_FILE = "storage.db"
 
 # Whether or not to print the info page on start
 PRINT_INFO_ON_START = True
