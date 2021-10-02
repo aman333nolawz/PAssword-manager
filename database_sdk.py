@@ -15,8 +15,14 @@ from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from PIL import Image
 
-from misc import green, red, ask
-from settings import (DICEWARE_WORDLIST, PASSWORD_GENERATOR_CHARS, PASSWORDS_FILE, STORAGE_FILE, SALT)
+from misc import ask, green, red
+from settings import (
+    DICEWARE_WORDLIST,
+    PASSWORD_GENERATOR_CHARS,
+    PASSWORDS_FILE,
+    SALT,
+    STORAGE_FILE,
+)
 
 
 def fernet(password, salt=SALT):
@@ -49,7 +55,7 @@ with STORAGE_CONN:
     )
 
 
-master_password = getpass("Master password: ")
+master_password = getpass("Master password (Characters won't be visible): ")
 
 f = fernet(master_password)
 
@@ -90,7 +96,9 @@ def make_password(length, method="random"):
 
 
 def check_master_password(exit_=False):
-    password_is_wrong = get_all_users(True) == True or get_all_files_stored(True) == True
+    password_is_wrong = (
+        get_all_users(True) == True or get_all_files_stored(True) == True
+    )
     if password_is_wrong:
         red("Wrong master password.")
         if exit_:
@@ -98,8 +106,9 @@ def check_master_password(exit_=False):
         return False
     return True
 
+
 def change_master_password():
-    global f,master_password
+    global f, master_password
 
     new_password = getpass("New Password: ")
     confirm_password = getpass("Confirm New Password: ")
@@ -111,7 +120,13 @@ def change_master_password():
     new_fer = fernet(new_password)
     PASSWORD_CURSOR.execute("SELECT * FROM manager")
     for username, old_encrypted_password in PASSWORD_CURSOR.fetchall():
-        new_encrypted_password = encrypt(decrypt(old_encrypted_password, fer=f,), fer=new_fer)
+        new_encrypted_password = encrypt(
+            decrypt(
+                old_encrypted_password,
+                fer=f,
+            ),
+            fer=new_fer,
+        )
         with PASSWORD_CONN:
             PASSWORD_CURSOR.execute(
                 "UPDATE manager SET password = ? WHERE username = ?",
@@ -179,20 +194,20 @@ def delete_user(username):
         green(f'Succesfully Removed Username: "{username}"')
 
 
+def delete_all_users():
+    with PASSWORD_CONN:
+        PASSWORD_CURSOR.execute("DELETE FROM manager")
+        green("Successully deleted all users & passwords")
+
+
 def get_user(username):
     username = username.lower().rstrip()
     PASSWORD_CURSOR.execute("SELECT * FROM manager WHERE username = ?", (username,))
     out = PASSWORD_CURSOR.fetchone()
     if out is not None:
-        print(f'Username: "{out[0]}" | Password: "{decrypt(out[1]), f}')
+        print(f'Username: "{out[0]}" | Password: "{decrypt(out[1], f)}"')
     else:
         red("There is no such user.")
-
-
-def delete_all_users():
-    with PASSWORD_CONN:
-        PASSWORD_CURSOR.execute("DELETE FROM manager")
-        green("Successully deleted all users & passwords")
 
 
 def get_all_users(debug=False):
@@ -260,7 +275,7 @@ def restore(filename):
     result = STORAGE_CURSOR.fetchone()
     if result is not None:
         path_to_save = ask("Type the path(with filename) to restore the file: ")
-        data = decrypt(result[1], f,encode=False)
+        data = decrypt(result[1], f, encode=False)
         data = pickle.loads(data)
         with open(path_to_save, "wb") as file:
             file.write(data)
