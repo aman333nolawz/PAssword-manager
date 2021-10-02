@@ -16,13 +16,8 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from PIL import Image
 
 from misc import ask, green, red
-from settings import (
-    DICEWARE_WORDLIST,
-    PASSWORD_GENERATOR_CHARS,
-    PASSWORDS_FILE,
-    SALT,
-    STORAGE_FILE,
-)
+from settings import (DICEWARE_WORDLIST, PASSWORD_GENERATOR_CHARS,
+                      PASSWORDS_FILE, SALT, STORAGE_FILE)
 
 
 def fernet(password, salt=SALT):
@@ -189,15 +184,21 @@ def add_user(username, password):
 
 def delete_user(username):
     username = username.lower().rstrip()
-    with PASSWORD_CONN:
-        PASSWORD_CURSOR.execute("DELETE FROM manager WHERE username = ?", (username,))
-        green(f'Succesfully Removed Username: "{username}"')
+    try:
+        with PASSWORD_CONN:
+            PASSWORD_CURSOR.execute("DELETE FROM manager WHERE username = ?", (username,))
+            green(f'Succesfully Removed Username: "{username}"')
+    except Exception as e:
+        red(f"There was an error:\n{e}")
 
 
 def delete_all_users():
-    with PASSWORD_CONN:
-        PASSWORD_CURSOR.execute("DELETE FROM manager")
-        green("Successully deleted all users & passwords")
+    try:
+        with PASSWORD_CONN:
+            PASSWORD_CURSOR.execute("DELETE FROM manager")
+            green("Successully deleted all users & passwords")
+    except Exception as e:
+        red(f"There was an error:\n{e}")
 
 
 def get_user(username):
