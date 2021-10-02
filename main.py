@@ -1,33 +1,17 @@
 import shutil
-import sqlite3
 from getpass import getpass
 
 from colorama import Fore, Style, init
 
-from database_sdk import (
-    PASSWORD_CONN,
-    STORAGE_CONN,
-    add_user,
-    change_master_password,
-    delete_all_users,
-    delete_user,
-    get_all_files_stored,
-    get_all_users,
-    get_user,
-    make_password,
-    preview,
-    restore,
-    store,
-    temp_dir,
-    update_user,
-)
+from database_sdk import (PASSWORD_CONN, STORAGE_CONN, add_user,
+                          change_master_password, delete_all_users,
+                          delete_user, get_all_files_stored, get_all_users,
+                          get_user, make_password, preview, restore, store,
+                          temp_dir, update_user)
 from misc import ask
-from settings import (
-    ENABLE_AUTOCOMPLETE,
-    ENABLE_INQUIRER_FOR_PASSWORD_GENERATION_TYPE,
-    PASSWORD_GENERATION_TYPE,
-    PRINT_INFO_ON_START,
-)
+from settings import (ENABLE_AUTOCOMPLETE,
+                      ENABLE_INQUIRER_FOR_PASSWORD_GENERATION_TYPE,
+                      PASSWORD_GENERATION_TYPE, PRINT_INFO_ON_START)
 
 init()
 
