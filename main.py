@@ -1,9 +1,8 @@
 import shutil
-from getpass import getpass
 import sqlite3
+from getpass import getpass
 
 from colorama import Fore, Style, init
-from misc import ask
 
 from database_sdk import (
     PASSWORD_CONN,
@@ -22,6 +21,7 @@ from database_sdk import (
     temp_dir,
     update_user,
 )
+from misc import ask
 from settings import (
     ENABLE_AUTOCOMPLETE,
     ENABLE_INQUIRER_FOR_PASSWORD_GENERATION_TYPE,
@@ -231,12 +231,7 @@ try:
 
         elif mode in modes["info"]:
             info()
-
-    shutil.rmtree(temp_dir)
-    PASSWORD_CONN.close()
-    STORAGE_CONN.close()
-except Exception as e:
-    print(e)
+finally:
     shutil.rmtree(temp_dir)
     PASSWORD_CONN.close()
     STORAGE_CONN.close()
