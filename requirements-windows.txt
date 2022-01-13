@@ -1,6 +1,6 @@
 cffi==1.14.6
 colorama==0.4.4
-Pillow==8.3.2
+Pillow==9.0.0
 pkg_resources==0.0.0
 pycparser==2.20
 semantic-version==2.8.5
