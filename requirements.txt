@@ -4,7 +4,7 @@ cffi==1.15.1
 colorama==0.4.4
 cryptography==35.0.0
 inquirer==2.7.0
-pillow==9.0.0
+pillow==9.0.1
 pycparser==2.21
 python-editor==1.0.4
 readchar==2.0.1
