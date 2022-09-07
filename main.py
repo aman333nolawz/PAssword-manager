@@ -4,9 +4,9 @@ from getpass import getpass
 from colorama import Fore, Style, init
 
 from database_sdk import (PASSWORD_CONN, STORAGE_CONN, add_user,
-                          change_master_password, delete_all_users,
+                          change_master_password, check_passwords, delete_all_users,
                           delete_user, get_all_files_stored, get_all_users,
-                          get_user, make_password, preview, restore, store,
+                          get_user, make_password, preview, restore, store, check_passwords,
                           temp_dir, update_user)
 from misc import ask
 from settings import (ENABLE_AUTOCOMPLETE,
@@ -62,6 +62,7 @@ dp: Deletes an user
 dpall: Deletes all the users
 mp: Generate a new strong password for you
 cp: Change the master password
+check: Check if any of your password has been pwned
 store: Store a file from your computer into database
 preview: Preview a file from the databse
 restore: Restore a file from the database to the computer
@@ -172,6 +173,10 @@ class PasswordManagerShell(cmd.Cmd):
 
         if ENABLE_AUTOCOMPLETE:
             readline.set_completer(self.complete)
+
+    def do_check(self, args):
+        "Check if any of your password has been in breaches"
+        check_passwords()
 
     def do_exit(self, args):
         "Quit the program"

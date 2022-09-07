@@ -16,6 +16,7 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from PIL import Image
 
 from misc import ask, green, red
+from pwned import has_been_pwned
 from settings import (DICEWARE_WORDLIST, PASSWORD_GENERATOR_CHARS,
                       PASSWORDS_FILE, SALT, STORAGE_FILE)
 
@@ -298,6 +299,18 @@ def get_all_files_stored(debug=False):
             out.append(filename)
     return out
 
+
+def check_passwords():
+    PASSWORD_CURSOR.execute("SELECT * FROM manager")
+    users = PASSWORD_CURSOR.fetchall()
+    try:
+        for user in users:
+            password = decrypt(user[1], f)
+            pwned = has_been_pwned(password)
+            if pwned and pwned != 0:
+                red("[!] User: " + user[0] + "'s password is in " + str(pwned) + " breach[es]")
+    except InvalidToken:
+        return True  # Says to exit
 
 check_master_password(exit_=True)
 
